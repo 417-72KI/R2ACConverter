@@ -239,4 +239,96 @@ final class FileConverterTests: XCTestCase {
         let actual = try FileConverter.convert(source)
         XCTAssertEqual(source, actual)
     }
+
+    func testConvert_property() throws {
+        let source = """
+            import UIKit
+            import RswiftResources
+
+            struct ResourceModel {
+                var resource: ImageResource
+            }
+
+            extension ResourceModel {
+                var image: UIImage {
+                    resource.image.callAsFunction()!
+                }
+
+                var image2: UIImage {
+                    resource.image()!
+                }
+
+                var image3: UIImage {
+                    UIImage(resource: resource.image)!
+                }
+            }
+
+            extension ResourceModel {
+                enum ImageResource {
+                    case foo
+                    case bar
+                    case baz
+                }
+            }
+
+            extension ResourceModel.ImageResource {
+                var image: RswiftResources.ImageResource {
+                    switch self {
+                    case .foo:
+                        R.image.foo_bar_1
+                    case .bar:
+                        R.image.foo_bar_2
+                    case .baz:
+                        R.image.fooBarBaz
+                    }
+                }
+            }
+            """
+
+        let converted = """
+            import UIKit
+
+            struct ResourceModel {
+                var resource: ImageResource
+            }
+
+            extension ResourceModel {
+                var image: UIImage {
+                    UIImage(resource: resource.image)
+                }
+
+                var image2: UIImage {
+                    UIImage(resource: resource.image)
+                }
+
+                var image3: UIImage {
+                    UIImage(resource: resource.image)
+                }
+            }
+
+            extension ResourceModel {
+                enum ImageResource {
+                    case foo
+                    case bar
+                    case baz
+                }
+            }
+
+            extension ResourceModel.ImageResource {
+                var image: ImageResource {
+                    switch self {
+                    case .foo:
+                        .fooBar1
+                    case .bar:
+                        .fooBar2
+                    case .baz:
+                        .fooBarBaz
+                    }
+                }
+            }
+            """
+
+        let actual = try FileConverter.convert(source)
+        XCTAssertEqual(converted, actual)
+    }
 }
