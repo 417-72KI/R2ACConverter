@@ -2,7 +2,7 @@ import XCTest
 @testable import AssetCatalogConverterCore
 
 final class FileConverterTests: XCTestCase {
-    func testConvert() throws {
+    func testConvert_simple() throws {
         let source = """
             import UIKit
 
@@ -93,5 +93,96 @@ final class FileConverterTests: XCTestCase {
 
         let actual = try FileConverter.convert(source)
         XCTAssertEqual(converted, actual)
+    }
+
+    func testConvert_multipleBlocks() throws {
+        let source = """
+            import UIKit
+
+            let globalImage = R.image.foo_bar_1()
+            let globalImage2 = R.image.foo_bar_2()!
+
+            let globalImages = (R.image.foo_bar_baz()!, R.image.fooBarBaz()!)
+
+            final class Foo {
+                enum Bar {
+                    case hoge
+                    case fuga
+
+                    var image: UIImage {
+                        switch self {
+                        case .hoge:
+                            return R.image.foo_bar_1()!
+                        case .fuga:
+                            return R.image.foo_bar_2()!
+                        }
+                    }
+                }
+            }
+            extension Foo.Bar {
+                var image2: UIImage {
+                    switch self {
+                    case .hoge:
+                        return R.image.foo_bar_1()!
+                    case .fuga:
+                        return R.image.foo_bar_2()!
+                    }
+                }
+            }
+            extension Foo.Bar {
+                struct Baz {
+                    var image = R.image.foo_bar_baz()
+                }
+            }
+            """
+
+        let converted = """
+            import UIKit
+
+            let globalImage = UIImage(resource: .fooBar1)
+            let globalImage2 = UIImage(resource: .fooBar2)
+
+            let globalImages = (UIImage(resource: .fooBarBaz), UIImage(resource: .fooBarBaz))
+
+            final class Foo {
+                enum Bar {
+                    case hoge
+                    case fuga
+
+                    var image: UIImage {
+                        switch self {
+                        case .hoge:
+                            return UIImage(resource: .fooBar1)
+                        case .fuga:
+                            return UIImage(resource: .fooBar2)
+                        }
+                    }
+                }
+            }
+            extension Foo.Bar {
+                var image2: UIImage {
+                    switch self {
+                    case .hoge:
+                        return UIImage(resource: .fooBar1)
+                    case .fuga:
+                        return UIImage(resource: .fooBar2)
+                    }
+                }
+            }
+            extension Foo.Bar {
+                struct Baz {
+                    var image = UIImage(resource: .fooBarBaz)
+                }
+            }
+            """
+
+        let actual = try FileConverter.convert(source)
+        XCTAssertEqual(converted, actual)
+    }
+
+    func testConvert_notModified() throws {
+        let source = #"let foo = "bar""#
+        let actual = try FileConverter.convert(source)
+        XCTAssertEqual(source, actual)
     }
 }
