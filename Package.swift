@@ -3,6 +3,17 @@
 
 import PackageDescription
 
+var isDevelop = true
+
+let devDependencies: [Package.Dependency] = isDevelop ? [
+    // .package(url: "https://github.com/realm/SwiftLint", from: "0.52.4"),
+    .package(url: "https://github.com/realm/SwiftLint", branch: "main"),
+] : []
+
+let devPlugins: [Target.PluginUsage] = isDevelop ? [
+    .plugin(name: "SwiftLintPlugin", package: "SwiftLint"),
+] : []
+
 let package = Package(
     name: "AssetCatalogConverter",
     platforms: [.macOS(.v13), .iOS("999999"), .watchOS("999999"), .tvOS("999999")],
@@ -12,9 +23,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.2.3"),
         .package(url: "https://github.com/apple/swift-syntax", from: "509.0.0"),
-        // .package(url: "https://github.com/realm/SwiftLint", from: "0.52.4"),
-        .package(url: "https://github.com/realm/SwiftLint", branch: "main"),
-    ],
+    ] + devDependencies,
     targets: [
         .executableTarget(
             name: "AssetCatalogConverter",
@@ -29,9 +38,7 @@ let package = Package(
                 .product(name: "SwiftSyntax", package: "swift-syntax"),
                 .product(name: "SwiftParser", package: "swift-syntax"),
             ],
-            plugins: [
-                .plugin(name: "SwiftLintPlugin", package: "SwiftLint")
-            ]
+            plugins: [] + devPlugins
         ),
         .testTarget(name: "AssetCatalogConverterCoreTests",
                     dependencies: ["AssetCatalogConverterCore"]),
