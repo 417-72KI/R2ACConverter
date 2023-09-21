@@ -3,7 +3,7 @@ import XCTest
 @testable import AssetCatalogConverterCore
 
 final class FileConverterTests: XCTestCase {
-    func testConvert_simple() throws {
+    func testConvert_UIKit_simple() throws {
         let source = """
             import UIKit
 
@@ -96,7 +96,7 @@ final class FileConverterTests: XCTestCase {
         XCTAssertEqual(converted, actual)
     }
 
-    func testConvert_multipleBlocks() throws {
+    func testConvert_UIKit_multipleBlocks() throws {
         let source = """
             import UIKit
 
@@ -173,6 +173,59 @@ final class FileConverterTests: XCTestCase {
             extension Foo.Bar {
                 struct Baz {
                     var image = UIImage(resource: .fooBarBaz)
+                }
+            }
+            """
+
+        let actual = try FileConverter.convert(source)
+        XCTAssertEqual(converted, actual)
+    }
+
+    func testConvert_SwiftUI() throws {
+        let source = """
+            import SwiftUI
+
+            struct SwiftUIView: View {
+                var body: some View {
+                    ScrollView {
+                        VStack {
+                            Image(R.image.foo_bar_1)
+                                .background(Color(uiColor: R.color.blue()!))
+                            Image(R.image.foo_bar_1_2)
+                                .background(Color(R.color.blue_1_2))
+                            Image(R.image.foo_bar_2)
+                                .background { Color(uiColor: R.color.blue()!) }
+                            Image(R.image.foo_bar_baz)
+                                .background {
+                                    Color(R.color.blue1_2)
+                                }
+                        }.padding(8)
+                            .frame(maxWidth: .infinity)
+                    }
+                }
+            }
+            """
+
+        let converted = """
+            import SwiftUI
+
+            struct SwiftUIView: View {
+                var body: some View {
+                    ScrollView {
+                        VStack {
+                            Image(.fooBar1)
+                                .background(Color(.blue))
+                            Image(.fooBar12)
+                                .background(Color(.blue12))
+                            Image(.fooBar2)
+                                .background { Color(.blue) }
+                            Image(.fooBarBaz)
+                                .background {
+                                    Color(.blue12)
+                                }
+                        }.padding(8)
+                            .frame(maxWidth: .infinity)
+                    }
                 }
             }
             """
