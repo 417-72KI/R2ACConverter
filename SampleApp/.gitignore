@@ -1,0 +1,6 @@
+.swiftpm
+*.xcodeproj
+/*.gcno
+**/xcshareddata/WorkspaceSettings.xcsettings
+
+# End of https://gitignore.io/api/xcode

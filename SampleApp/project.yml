@@ -1,0 +1,25 @@
+name: AssetCatalogConverterSample
+configs:
+  Debug: debug
+  Release: release
+options: 
+  bundleIdPrefix: jp.room417
+packages:
+  R.swift:
+    url: https://github.com/mac-cain13/R.swift
+    from: 7.4.0
+targets:
+  AssetCatalogConverterSample:
+    type: application
+    platform: iOS
+    deploymentTarget: "15.0"
+    sources: [AssetCatalogConverterSample]
+    settings:
+      base:
+        ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS: true
+    dependencies:
+      - product: RswiftLibrary
+        package: R.swift
+    buildToolPlugins:
+      - plugin: RswiftGenerateInternalResources
+        package: R.swift
