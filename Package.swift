@@ -25,6 +25,7 @@ let package = Package(
             name: "AssetCatalogConverterCore",
             dependencies: [
                 .product(name: "SwiftSyntax", package: "swift-syntax"),
+                .product(name: "SwiftParser", package: "swift-syntax"),
             ]
         ),
         .testTarget(name: "AssetCatalogConverterCoreTests",
