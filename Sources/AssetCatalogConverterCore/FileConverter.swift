@@ -76,7 +76,11 @@ private class ResourceRewriter: SyntaxRewriter {
     }
 
     override func visit(_ token: ForceUnwrapExprSyntax) -> ExprSyntax {
-        print(token)
+        if let expr = token.expression.as(FunctionCallExprSyntax.self),
+           let converted = visit(expr).as(FunctionCallExprSyntax.self),
+           expr != converted {
+            return super.visit(converted)
+        }
         return super.visit(token)
     }
 }
