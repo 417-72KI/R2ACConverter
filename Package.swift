@@ -12,6 +12,8 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.2.3"),
         .package(url: "https://github.com/apple/swift-syntax", from: "509.0.0"),
+        // .package(url: "https://github.com/realm/SwiftLint", from: "0.52.4"),
+        .package(url: "https://github.com/realm/SwiftLint", branch: "main"),
     ],
     targets: [
         .executableTarget(
@@ -26,6 +28,9 @@ let package = Package(
             dependencies: [
                 .product(name: "SwiftSyntax", package: "swift-syntax"),
                 .product(name: "SwiftParser", package: "swift-syntax"),
+            ],
+            plugins: [
+                .plugin(name: "SwiftLintPlugin", package: "SwiftLint")
             ]
         ),
         .testTarget(name: "AssetCatalogConverterCoreTests",
