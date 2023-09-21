@@ -1,4 +1,5 @@
 import XCTest
+
 @testable import AssetCatalogConverterCore
 
 final class FileConverterTests: XCTestCase {
@@ -83,7 +84,7 @@ final class FileConverterTests: XCTestCase {
                         UIColor(resource: .blue),
                         UIColor(resource: .blue1),
                         UIColor(resource: .blue12),
-                        UIColor(resource: .blue12)
+                        UIColor(resource: .blue12),
                     ]
 
                     view.backgroundColor = colors.shuffled().first!
