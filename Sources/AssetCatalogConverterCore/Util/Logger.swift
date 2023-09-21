@@ -1,5 +1,4 @@
 import Foundation
-import os
 
 let logger: Logger = .init()
 
