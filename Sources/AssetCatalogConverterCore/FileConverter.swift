@@ -20,17 +20,19 @@ private extension FileConverter {
             if let member = node.calledExpression.as(MemberAccessExprSyntax.self),
                let base = member.base?.as(MemberAccessExprSyntax.self),
                base.base?.as(DeclReferenceExprSyntax.self)?.baseName.text == "R" {
-                switch base.declName.baseName.text {
-                case "image":
+                let reader = RswiftResourceReader(viewMode: .all)
+                reader.walk(base)
+                switch reader.detectedResource {
+                case let .image(imageName):
                     let builder = UIImageBuilder(
-                        imageName: member.declName.baseName.text.camelized,
+                        imageName: imageName.camelized,
                         leadingTrivia: node.leadingTrivia,
                         trailingTrivia: node.trailingTrivia
                     )
                     return super.visit(builder.build())
-                case "color":
+                case let .color(colorName):
                     let builder = UIColorBuilder(
-                        colorName: member.declName.baseName.text.camelized,
+                        colorName: colorName.camelized,
                         leadingTrivia: node.leadingTrivia,
                         trailingTrivia: node.trailingTrivia
                     )
