@@ -37,6 +37,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-swift
             ${{ runner.os }}-
+      - name: Configure Xcode
+        run: |
+          defaults write com.apple.dt.XCBuild EnableSwiftBuildSystemIntegration 1
+          defaults write com.apple.dt.Xcode IDESkipPackagePluginFingerprintValidatation -bool YES
       - name: test
         run: |
           swift package clean
@@ -75,7 +79,5 @@ jobs:
             ${{ runner.os }}-swift-${{ matrix.swift_version }}
             ${{ runner.os }}-swift
             ${{ runner.os }}-
-      - name: build
-        run: swift build
       - name: test
         run: swift package clean && swift test

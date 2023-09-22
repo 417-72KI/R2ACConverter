@@ -4,6 +4,9 @@
 import PackageDescription
 
 var isDevelop = true
+#if !os(macOS)
+isDevelop = false
+#endif
 
 let devDependencies: [Package.Dependency] = isDevelop ? [
     // .package(url: "https://github.com/realm/SwiftLint", from: "0.52.4"),
