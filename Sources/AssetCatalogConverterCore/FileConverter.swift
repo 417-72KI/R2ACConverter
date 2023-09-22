@@ -1,6 +1,6 @@
 import Foundation
-import SwiftSyntax
 import SwiftParser
+import SwiftSyntax
 
 enum FileConverter {}
 

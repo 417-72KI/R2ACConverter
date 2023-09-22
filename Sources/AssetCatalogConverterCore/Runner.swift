@@ -5,7 +5,7 @@ import FoundationNetworking
 
 public actor Runner {
     var workingDir: String
-    
+
     let fm = FileManager.default
 
     public init(path: String) {
