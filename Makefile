@@ -2,7 +2,7 @@ project_name = AssetCatalogConverter
 executable_name = asset-catalog-converter
 
 .SILENT:
-.PHONY : demo sample lint autocorrect release
+.PHONY : demo sample lint autocorrect release formula
 
 demo:
 	swift run asset-catalog-converter SampleApp
@@ -19,3 +19,6 @@ autocorrect:
 
 release:
 	scripts/release.sh ${executable_name}
+
+formula:
+	scripts/update_formula.sh ${project_name} ${executable_name}

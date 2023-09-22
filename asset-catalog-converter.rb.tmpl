@@ -1,0 +1,30 @@
+class AssetCatalogConverter < Formula
+  desc "Convert R.swift resources with Asset Catalog for Xcode 15"
+  homepage "https://github.com/417-72KI/AssetCatalogConverter"
+  version "{{TAG}}"
+
+  on_macos do
+    url "https://github.com/417-72KI/AssetCatalogConverter/archive/#{version}.tar.gz"
+    sha256 "{{SHA256_SOURCE}}"
+    depends_on :xcode => ["15.0", :build]
+  end
+  on_linux do
+    url "https://github.com/417-72KI/AssetCatalogConverter/releases/download/#{version}/asset-catalog-converter-linux-v#{version}.zip"
+    sha256 "{{SHA256_LINUX}}"
+  end
+  license "MIT"
+  head "https://github.com/417-72KI/AssetCatalogConverter.git", branch: "main"
+
+  def install
+    if OS.mac?
+      system "swift", "build", "--disable-sandbox", "-c", "release", "-Xswiftc", "-suppress-warnings"
+      bin.install ".build/release/asset-catalog-converter"
+    elsif OS.linux?
+      bin.install "asset-catalog-converter"
+    end
+  end
+
+  test do
+    system "#{bin}/asset-catalog-converter", "--version"
+  end
+end
