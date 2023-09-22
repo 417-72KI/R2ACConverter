@@ -3,7 +3,7 @@
 
 import PackageDescription
 
-var isDevelop = true
+var isDevelop = false
 #if !os(macOS)
 isDevelop = false
 #endif
