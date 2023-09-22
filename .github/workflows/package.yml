@@ -9,7 +9,7 @@ on:
 jobs:
   resolve-package:
     name: Resolve package
-    runs-on: macos-latest
+    runs-on: macos-13
     steps:
       - uses: actions/checkout@v4
       - uses: actions/cache@v3
@@ -19,10 +19,19 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-swift
             ${{ runner.os }}-
+      - name: Fetch Xcode version
+        id: xcode-version
+        run: |
+          xcode_version=$(cat .github/matrix.json | jq -rc '.xcode_version')
+          echo "xcode-version=$xcode_version" >> $GITHUB_OUTPUT
       - name: Resolve dependencies
         id: resolve
+        env:
+          DEVELOPER_DIR: /Applications/Xcode_${{ steps.xcode-version.outputs.xcode-version }}.app/Contents/Developer
         run: |
-          swift package resolve
+          if [[ "$(cat Package.swift | grep 'var isDevelop =' | awk '{ print $NF }')" = true ]]; then
+            swift package resolve
+          fi
           echo "count=$(git diff --name-only | grep -E '^Package.resolved$' | wc -l)" >> $GITHUB_OUTPUT
       - name: Commit Package.resolved
         if: steps.resolve.outputs.count > 0
