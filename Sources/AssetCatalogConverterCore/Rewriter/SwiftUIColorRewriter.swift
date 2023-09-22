@@ -7,20 +7,7 @@ final class SwiftUIColorRewriter: SyntaxRewriter {
               decl.baseName.text == "Color" else {
             return super.visit(node)
         }
-        let reader = RswiftResourceReader(viewMode: .all)
-        reader.walk(node)
-        guard case let .color(colorName) = reader.detectedResource else {
-            return ExprSyntax(node)
-        }
-        return ExprSyntax(
-            node.with(\.arguments, [
-                LabeledExprSyntax(
-                    expression: MemberAccessExprSyntax(
-                        period: .periodToken(),
-                        name: .identifier(colorName.camelized)
-                    )
-                )
-            ])
-        )
+        return RswiftResourceRewriter(viewMode: .all)
+            .visit(node)
     }
 }
