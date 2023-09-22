@@ -3,6 +3,7 @@ included:
 excluded:
   - Tests
   - SampleApp
+  - Package.swift
   - Dangerfile.swift
   - DangerfileExtensions
 allow_zero_lintable_files: true
