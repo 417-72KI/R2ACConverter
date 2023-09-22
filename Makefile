@@ -1,4 +1,8 @@
+project_name = AssetCatalogConverter
+executable_name = asset-catalog-converter
+
 .SILENT:
+.PHONY : demo sample lint autocorrect release
 
 demo:
 	swift run asset-catalog-converter SampleApp
@@ -12,3 +16,6 @@ lint:
 
 autocorrect:
 	swift run swiftlint --fix
+
+release:
+	scripts/release.sh ${executable_name}
