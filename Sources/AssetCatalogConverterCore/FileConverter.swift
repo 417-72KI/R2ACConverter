@@ -16,6 +16,7 @@ extension FileConverter {
 private extension FileConverter {
     final class ResourceRewriter: SyntaxRewriter {
         override func visit(_ node: FunctionCallExprSyntax) -> ExprSyntax {
+            // for UIKit
             if let member = node.calledExpression.as(MemberAccessExprSyntax.self),
                let base = member.base?.as(MemberAccessExprSyntax.self),
                base.base?.as(DeclReferenceExprSyntax.self)?.baseName.text == "R" {
@@ -36,6 +37,23 @@ private extension FileConverter {
                     return super.visit(builder.build())
                 default: break
                 }
+            }
+            // for SwiftUI
+            if let decl = node.calledExpression.as(DeclReferenceExprSyntax.self) {
+                switch decl.baseName.text {
+                case "Image":
+                    return ExprSyntax(
+                        SwiftUIImageRewriter(viewMode: .all)
+                            .visit(node)
+                    )
+                case "Color":
+                    return ExprSyntax(
+                        SwiftUIColorRewriter(viewMode: .all)
+                            .visit(node)
+                    )
+                default: break
+                }
+                print()
             }
             return super.visit(node)
         }
