@@ -12,15 +12,15 @@ function finally {
     rm -rf ./tmp
 }
 
-TAG=$(swift run ssgh --version 2>/dev/null)
+PROJECT_NAME=$1
+EXECUTABLE_NAME=$2
+
+TAG=$(swift run ${EXECUTABLE_NAME} --version 2>/dev/null)
 
 if [[ "$TAG" != "$(git describe --exact-match --tags 2>/dev/null)" ]]; then
     echo '\e[31m[ERROR] Must run on tag.\e[m'
     exit 1
 fi
-
-PROJECT_NAME=$1
-EXECUTABLE_NAME=$2
 
 FORMULA_PATH="${EXECUTABLE_NAME}.rb"
 FORMULA_URL="https://api.github.com/repos/417-72KI/homebrew-tap/contents/$FORMULA_PATH"
