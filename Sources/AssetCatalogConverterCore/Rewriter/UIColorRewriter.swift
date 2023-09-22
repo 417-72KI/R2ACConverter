@@ -18,7 +18,7 @@ final class UIColorRewriter: SyntaxRewriter {
             let newArgument = rswiftResourceRewriter.visit(argument)
             return ExprSyntax(node.with(\.arguments, [newArgument]))
         }
-        return super.visit(rswiftResourceRewriter.visit(node))
+        return super.visit(node)
     }
 
     override func visit(_ token: ForceUnwrapExprSyntax) -> ExprSyntax {

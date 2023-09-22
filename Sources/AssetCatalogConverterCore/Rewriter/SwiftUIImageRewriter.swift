@@ -9,10 +9,33 @@ final class SwiftUIImageRewriter: SyntaxRewriter {
             return super.visit(node)
         }
         if argument.label?.text == "uiImage" {
-            // Create `UIImageRewriter`
-            print(argument)
+            if let expr = uiImageRewriter.visit(argument.expression).as(FunctionCallExprSyntax.self),
+               let colorName = expr.arguments.first?.expression {
+                return ExprSyntax(
+                    node.with(\.arguments, [.init(expression: colorName)])
+                )
+            }
+            if let expr = rswiftResourceRewriter.visit(argument.expression).as(FunctionCallExprSyntax.self),
+               let argument = expr.arguments.first,
+               argument.label?.text == "resource" {
+                return ExprSyntax(
+                    node.with(\.arguments, [
+                        argument.with(\.label, nil)
+                            .with(\.colon, nil)
+                    ])
+                )
+            }
         }
-        return RswiftResourceRewriter(viewMode: .all)
-            .visit(node)
+        return rswiftResourceRewriter.visit(node)
+    }
+}
+
+private extension SwiftUIImageRewriter {
+    var uiImageRewriter: UIImageRewriter {
+        UIImageRewriter(viewMode: viewMode)
+    }
+
+    var rswiftResourceRewriter: RswiftResourceRewriter {
+        RswiftResourceRewriter(viewMode: viewMode)
     }
 }
