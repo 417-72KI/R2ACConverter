@@ -20,55 +20,19 @@ private class ResourceRewriter: SyntaxRewriter {
            base.base?.as(DeclReferenceExprSyntax.self)?.baseName.text == "R" {
             switch base.declName.baseName.text {
             case "image":
-                let imageName = member.declName.baseName.text.camelized
-                return super.visit(
-                    FunctionCallExprSyntax(
-                        leadingTrivia: node.leadingTrivia,
-                        calledExpression: DeclReferenceExprSyntax(
-                            baseName: .identifier("UIImage")
-                        ),
-                        leftParen: node.leftParen,
-                        arguments: [
-                            LabeledExprSyntax(
-                                label: .identifier("resource"),
-                                colon: .colonToken(trailingTrivia: .space),
-                                expression: MemberAccessExprSyntax(
-                                    period: .periodToken(),
-                                    name: .identifier(imageName)
-                                )
-                            )
-                        ],
-                        rightParen: node.rightParen,
-                        trailingClosure: node.trailingClosure,
-                        additionalTrailingClosures: node.additionalTrailingClosures,
-                        trailingTrivia: node.trailingTrivia
-                    )
+                let builder = UIImageBuilder(
+                    imageName: member.declName.baseName.text.camelized,
+                    leadingTrivia: node.leadingTrivia,
+                    trailingTrivia: node.trailingTrivia
                 )
+                return super.visit(builder.build())
             case "color":
-                let colorName = member.declName.baseName.text.camelized
-                return super.visit(
-                    FunctionCallExprSyntax(
-                        leadingTrivia: node.leadingTrivia,
-                        calledExpression: DeclReferenceExprSyntax(
-                            baseName: .identifier("UIColor")
-                        ),
-                        leftParen: node.leftParen,
-                        arguments: [
-                            LabeledExprSyntax(
-                                label: .identifier("resource"),
-                                colon: .colonToken(trailingTrivia: .space),
-                                expression: MemberAccessExprSyntax(
-                                    period: .periodToken(),
-                                    name: .identifier(colorName)
-                                )
-                            )
-                        ],
-                        rightParen: node.rightParen,
-                        trailingClosure: node.trailingClosure,
-                        additionalTrailingClosures: node.additionalTrailingClosures,
-                        trailingTrivia: node.trailingTrivia
-                    )
+                let builder = UIColorBuilder(
+                    colorName: member.declName.baseName.text.camelized,
+                    leadingTrivia: node.leadingTrivia,
+                    trailingTrivia: node.trailingTrivia
                 )
+                return super.visit(builder.build())
             default: break
             }
         }
