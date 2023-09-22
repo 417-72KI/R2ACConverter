@@ -8,9 +8,11 @@ final class RswiftResourceRewriterTests: XCTestCase {
         let pattern: [(String, String)] = [
             ("R.image.foo", ".foo"),
             ("R.image.bar_baz", ".barBaz"),
+            ("R.image.qux()!", "UIImage(resource: .qux)"),
             ("flag ? R.image.foo : R.image.bar", "flag ? .foo : .bar"),
             ("R.color.foo", ".foo"),
             ("R.color.bar_baz", ".barBaz"),
+            ("R.color.qux()!", "UIColor(resource: .qux)"),
             ("flag ? R.color.foo : R.color.bar", "flag ? .foo : .bar"),
         ]
         pattern.forEach { input, expected in
