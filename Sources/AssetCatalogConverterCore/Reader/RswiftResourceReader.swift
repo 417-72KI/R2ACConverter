@@ -22,7 +22,7 @@ final class RswiftResourceReader: SyntaxVisitor {
 }
 
 extension RswiftResourceReader {
-    enum ResourceType {
+    enum ResourceType: Equatable {
         case image(String)
         case color(String)
     }
