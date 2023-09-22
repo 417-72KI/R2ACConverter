@@ -4,7 +4,7 @@ import FoundationNetworking
 
 extension URL {
     @available(macOS 13.0, iOS 16.0, tvOS 16.0, watchOS 9.0, *)
-    public init(filePath path: String, 
+    public init(filePath path: String,
                 directoryHint: URL.DirectoryHint = .inferFromPath,
                 relativeTo base: URL? = nil) {
         self.init(fileURLWithPath: path,

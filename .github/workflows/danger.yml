@@ -11,6 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Avoid detecting SwiftLint in Package.swift
+        run: |
+          sed -i -e 's/.*\.package(url: "https:\/\/github\.com\/realm\/SwiftLint".*//g' Package.swift
       - name: Danger
         uses: 417-72KI/danger-swiftlint@v5.9
         env:

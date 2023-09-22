@@ -19,6 +19,6 @@ extension String {
         let first = String(describing: parts.first!).lowercasingFirst
         let rest = parts.dropFirst().map { String($0).uppercasingFirst }
 
-        return ([first] + rest).joined(separator: "")
+        return ([first] + rest).joined()
     }
 }
