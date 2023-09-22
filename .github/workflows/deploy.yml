@@ -1,0 +1,104 @@
+name: Deploy
+on:
+  push:
+    tags: '*'
+  workflow_dispatch:
+env:
+  EXECUTABLE_NAME: asset-catalog-converter
+  EXECUTABLE_VERSION: ${{ github.ref_name }}
+jobs:
+  generate-matrix:
+    name: Generate matrix
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - id: set-matrix
+        run: |
+          xcode_version=$(cat .github/matrix.json | jq -rc '.xcode_version')
+          swift_version=$(cat .github/matrix.json | jq -rc '.swift_version | max')
+          echo "xcode-version=$xcode_version" >> $GITHUB_OUTPUT
+          echo "swift-version=$swift_version" >> $GITHUB_OUTPUT
+    outputs:
+      xcode-version: ${{ steps.set-matrix.outputs.xcode-version }}
+      swift-version: ${{ steps.set-matrix.outputs.swift-version }}
+  build-macos:
+    name: Build Assets for macOS
+    needs: generate-matrix
+    runs-on: macOS-13
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v3
+        with:
+          path: .build
+          key: ${{ runner.os }}-swift-${{ hashFiles('Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-swift
+            ${{ runner.os }}-
+      - name: Build and zip
+        env:
+          DEVELOPER_DIR: /Applications/Xcode_${{ needs.generate-matrix.outputs.xcode-version }}.app/Contents/Developer
+        run: |
+          set -e
+          SWIFT_BUILD_FLAGS='-c release -Xswiftc -suppress-warnings --arch arm64 --arch x86_64'
+          EXECUTABLE_PATH="$(swift build $SWIFT_BUILD_FLAGS --show-bin-path)/${EXECUTABLE_NAME}"
+          swift build $SWIFT_BUILD_FLAGS 
+          "$EXECUTABLE_PATH" --version
+          zip -j ".build/${EXECUTABLE_NAME}-macos-v${EXECUTABLE_VERSION}.zip" "$EXECUTABLE_PATH" LICENSE
+      - name: Upload zip
+        uses: actions/upload-artifact@v3
+        with:
+          name: macos
+          path: .build/${{ env.EXECUTABLE_NAME }}-macos-v${{ env.EXECUTABLE_VERSION }}.zip
+          if-no-files-found: error
+          retention-days: 7        
+  build-linux:
+    name: Build Assets for Linux
+    needs: generate-matrix
+    runs-on: ubuntu-latest
+    container:
+      image: swift:${{ needs.generate-matrix.outputs.swift-version }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v3
+        with:
+          path: .build
+          key: ${{ runner.os }}-swift-${{ hashFiles('Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-swift
+            ${{ runner.os }}-
+      - name: Build
+        run: |
+          set -e
+          SWIFT_BUILD_FLAGS='-c release -Xswiftc -suppress-warnings'
+          EXECUTABLE_PATH="$(swift build $SWIFT_BUILD_FLAGS --show-bin-path)/${EXECUTABLE_NAME}"
+          echo "EXECUTABLE_PATH=$EXECUTABLE_PATH" >> $GITHUB_ENV
+          swift build $SWIFT_BUILD_FLAGS
+          "$EXECUTABLE_PATH" --version
+      - name: Create zip
+        run: |
+          apt-get -qq update && apt-get -qq install -y zip
+          zip -j .build/${EXECUTABLE_NAME}-linux-v${EXECUTABLE_VERSION}.zip "$EXECUTABLE_PATH" LICENSE
+      - name: Upload zip
+        uses: actions/upload-artifact@v3
+        with:
+          name: linux
+          path: .build/${{ env.EXECUTABLE_NAME }}-linux-v${{ env.EXECUTABLE_VERSION }}.zip
+          if-no-files-found: error
+          retention-days: 7        
+  release-assets:
+    name: Release Assets
+    needs:
+      - build-macos
+      - build-linux
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v3
+      - name: Create release
+        if: success() && startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        with:
+          name: ${{ github.ref_name }}
+          files: |
+            macos/${{ env.EXECUTABLE_NAME }}-macos-v${{ env.EXECUTABLE_VERSION }}.zip
+            linux/${{ env.EXECUTABLE_NAME }}-linux-v${{ env.EXECUTABLE_VERSION }}.zip
+          draft: false
