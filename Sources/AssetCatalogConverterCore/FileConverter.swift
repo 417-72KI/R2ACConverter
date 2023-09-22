@@ -55,7 +55,6 @@ private extension FileConverter {
                     )
                 default: break
                 }
-                print()
             }
             return super.visit(node)
         }
