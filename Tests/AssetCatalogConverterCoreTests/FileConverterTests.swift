@@ -195,7 +195,7 @@ final class FileConverterTests: XCTestCase {
                                 .background(Color(R.color.blue_1_2))
                             Image(R.image.foo_bar_2)
                                 .background { Color(uiColor: R.color.blue()!) }
-                            Image(R.image.foo_bar_baz)
+                            Image(uiImage: R.image.foo_bar_baz()!)
                                 .background {
                                     Color(R.color.blue1_2)
                                 }

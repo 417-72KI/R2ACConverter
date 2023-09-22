@@ -8,6 +8,7 @@ final class SwiftUIImageRewriterTests: XCTestCase {
         let pattern: [(String, String)] = [
             ("Image(R.image.foo)", "Image(.foo)"),
             ("Image(R.image.bar_baz)", "Image(.barBaz)"),
+            ("Image(flag ? R.image.foo : R.image.bar)", "Image(flag ? .foo : .bar)"),
         ]
         pattern.forEach { input, expected in
             let source = Parser.parse(source: input)
