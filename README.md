@@ -7,6 +7,26 @@
 
 A simple converter from R.swift to Asset Catalog for Xcode 15
 
+## Example
+### R.image
+| before | after |
+| --- | --- |
+| `R.image.foo()` | `UIImage(resource: .foo)` |
+| `R.image.bar()!` | `UIImage(resource: .bar)` |
+| `UIImage(resource: R.image.baz)` | `UIImage(resource: .baz)` |
+| `Image(R.image.qux)` | `Image(.qux)` |
+| `Image(uiImage: R.image.quux()!)` | `Image(.quux)` |
+| `Image(uiImage: UIImage(resource: R.image.corge)!)` | `Image(.corge)` |
+### R.color
+| before | after |
+| --- | --- |
+| `R.color.foo()` | `UIColor(resource: .foo)` |
+| `R.color.bar()!` | `UIColor(resource: .bar)` |
+| `UIColor(resource: R.color.baz)` | `UIColor(resource: .baz)` |
+| `Color(R.color.qux)` | `Color(.qux)` |
+| `Color(uiColor: R.color.quux()!)` | `Color(.quux)` |
+| `Color(uiColor: UIColor(resource: R.color.corge)!)` | `Color(.corge)` |
+
 ## Requirement
 - macOS 13+
 - Xcode 15+
