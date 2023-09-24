@@ -15,6 +15,9 @@ struct Runner: AsyncParsableCommand {
     }
 
     func run() async throws {
-        try await Core(path: path ?? FileManager.default.currentDirectoryPath).run()
+        try await Core(
+            path: path ?? FileManager.default.currentDirectoryPath,
+            excludedPaths: exclude
+        ).run()
     }
 }
