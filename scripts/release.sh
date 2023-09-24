@@ -46,3 +46,4 @@ gh release create ${TAG}
 # After release
 sed -i '' -e 's/var isDevelop = false/var isDevelop = true/g' Package.swift
 git commit -m "develop mode" Package.swift
+git push origin main

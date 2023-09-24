@@ -10,27 +10,49 @@ function catch {
 }
 function finally {
     rm -rf ./tmp
+    echo '\e[32mSwitch to main.\e[m'
+    git switch main
 }
 
 PROJECT_NAME=$1
 EXECUTABLE_NAME=$2
 
+if [ `git symbolic-ref --short HEAD` != 'main' ]; then
+    echo '\e[31m[ERROR] Updating formula is enabled only in main.\e[m'
+    exit 1
+fi
+
 TAG=$(swift run ${EXECUTABLE_NAME} --version 2>/dev/null)
 
 if [[ "$TAG" != "$(git describe --exact-match --tags 2>/dev/null)" ]]; then
-    echo '\e[31m[ERROR] Must run on tag.\e[m'
-    exit 1
+    echo "\e[32mSwitch to ${TAG}.\e[m"
+    git switch --detach ${TAG}
 fi
 
 FORMULA_PATH="${EXECUTABLE_NAME}.rb"
 FORMULA_URL="https://api.github.com/repos/417-72KI/homebrew-tap/contents/$FORMULA_PATH"
+
+LATEST_VERSION=$(curl -sS -X GET $FORMULA_URL \
+    -H "Content-Type:application/json" \
+    -H "Authorization:token $GITHUB_TOKEN" \
+    | jq -rc .content \
+    | base64 -d \
+    | grep -E '^ *version "\d+\.\d+\.\d+"$' \
+    | sed -E 's/^ *version "([0-9]+\.[0-9]+\.[0-9]+)"/\1/g'
+)
+
+if [[ "$(git describe --exact-match --tags 2>/dev/null)" == "$LATEST_VERSION" ]]; then
+    echo '\e[31m[ERROR] Formula is already latest version.\e[m'
+    exit 1
+fi
+
 CURRENT_FORMULA=`curl -sS -X GET $FORMULA_URL | jq -c .`
 FORMULA_CONTENT=`echo "${CURRENT_FORMULA}" | tr -d '[:cntrl:]' | jq -r '.content'`
 SHA=`echo "${CURRENT_FORMULA}" | tr -d '[:cntrl:]' | jq -r '.sha'`
 
-echo '\e[33mdownload source\e[m' 1>&2
+echo '\e[32mdownload source\e[m' 1>&2
 gh release download $TAG --archive=tar.gz -D ./tmp
-echo '\e[33mdownload assets\e[m' 1>&2
+echo '\e[32mdownload assets\e[m' 1>&2
 gh release download $TAG -D ./tmp
 
 SHA256_SOURCE=$(shasum -a 256 ./tmp/${PROJECT_NAME}-${TAG}.tar.gz | awk '{ print $1 }')
