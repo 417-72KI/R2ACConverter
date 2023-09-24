@@ -9,11 +9,15 @@ struct Runner: AsyncParsableCommand {
 
     @Option(name: .shortAndLong, help: "paths to ignore directories")
     var exclude: [String] = []
+}
 
+extension Runner {
     static var configuration: CommandConfiguration {
         .init(version: ApplicationInfo.version)
     }
+}
 
+extension Runner {
     func run() async throws {
         try await Core(
             path: path ?? FileManager.default.currentDirectoryPath,
