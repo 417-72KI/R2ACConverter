@@ -4,7 +4,7 @@ import R2ACConverterCore
 
 @main
 struct Runner: AsyncParsableCommand {
-    @Argument(help: "Path of the project to convert.")
+    @Argument(help: "a path of the project to convert, default to current directory")
     var path: String?
 
     static var configuration: CommandConfiguration {
