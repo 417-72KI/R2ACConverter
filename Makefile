@@ -1,11 +1,11 @@
-project_name = AssetCatalogConverter
-executable_name = asset-catalog-converter
+project_name = R2ACConverter
+executable_name = r2acconverter
 
 .SILENT:
 .PHONY : demo sample lint autocorrect release formula
 
 demo:
-	swift run asset-catalog-converter SampleApp
+	swift run r2acconverter SampleApp
 
 sample:
 	mint run xcodegen xcodegen generate --spec SampleApp/project.yml

@@ -1,11 +1,13 @@
-# AssetCatalogConverter
-[![Actions Status](https://github.com/417-72KI/AssetCatalogConverter/workflows/Test/badge.svg)](https://github.com/417-72KI/AssetCatalogConverter/actions)
-[![GitHub release](https://img.shields.io/github/release/417-72KI/AssetCatalogConverter/all.svg)](https://github.com/417-72KI/AssetCatalogConverter/releases)
+# R2ACConverter
+[![Actions Status](https://github.com/417-72KI/R2ACConverter/workflows/Test/badge.svg)](https://github.com/417-72KI/R2ACConverter/actions)
+[![GitHub release](https://img.shields.io/github/release/417-72KI/R2ACConverter/all.svg)](https://github.com/417-72KI/R2ACConverter/releases)
 [![SwiftPM Compatible](https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg)](https://swift.org/package-manager)
-[![Platform](https://img.shields.io/badge/Platforms-macOS%7CLinux-blue.svg)](https://github.com/417-72KI/AssetCatalogConverter)
-[![GitHub license](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://raw.githubusercontent.com/417-72KI/AssetCatalogConverter/master/LICENSE)
+[![Platform](https://img.shields.io/badge/Platforms-macOS%7CLinux-blue.svg)](https://github.com/417-72KI/R2ACConverter)
+[![GitHub license](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://raw.githubusercontent.com/417-72KI/R2ACConverter/master/LICENSE)
 
-A simple converter from R.swift to Asset Catalog for Xcode 15
+**R2ACConverter** is a simple converter from R.swift to Asset Catalog for Xcode 15.
+
+Its name is came from ***R**swiftresources **to** **A**sset **C**atalog*
 
 ## Example
 ### R.image
@@ -36,16 +38,16 @@ A simple converter from R.swift to Asset Catalog for Xcode 15
 ### Mint
 
 ```sh
-mint install 417-72KI/AssetCatalogConverter
+mint install 417-72KI/R2ACConverter
 ```
 
 ### Homebrew
 
 ```sh
-brew install 417-72KI/tap/asset-catalog-converter
+brew install 417-72KI/tap/r2acconverter
 ```
 
 ## Usage
 ```sh
-$ asset-catalog-converter /path/to/project
+$ r2acconverter /path/to/project
 ```

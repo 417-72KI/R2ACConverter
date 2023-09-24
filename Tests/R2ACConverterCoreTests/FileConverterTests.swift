@@ -1,6 +1,6 @@
 import XCTest
 
-@testable import AssetCatalogConverterCore
+@testable import R2ACConverterCore
 
 final class FileConverterTests: XCTestCase {
     func testConvert_UIKit_simple() throws {

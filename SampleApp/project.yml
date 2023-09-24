@@ -1,4 +1,4 @@
-name: AssetCatalogConverterSample
+name: R2ACConverterSample
 configs:
   Debug: debug
   Release: release
@@ -9,11 +9,11 @@ packages:
     url: https://github.com/mac-cain13/R.swift
     from: 7.4.0
 targets:
-  AssetCatalogConverterSample:
+  R2ACConverterSample:
     type: application
     platform: iOS
     deploymentTarget: "15.0"
-    sources: [AssetCatalogConverterSample]
+    sources: [R2ACConverterSample]
     settings:
       base:
         ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS: true

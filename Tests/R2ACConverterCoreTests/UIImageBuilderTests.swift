@@ -1,6 +1,6 @@
 import XCTest
 
-@testable import AssetCatalogConverterCore
+@testable import R2ACConverterCore
 
 final class UIImageBuilderTests: XCTestCase {
     func testBuild() throws {

@@ -1,7 +1,7 @@
 import XCTest
 import SwiftParser
 
-@testable import AssetCatalogConverterCore
+@testable import R2ACConverterCore
 
 final class SwiftUIColorRewriterTests: XCTestCase {
     func testVisit() throws {

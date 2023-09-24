@@ -3,7 +3,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "AssetCatalogConverterSampleApp",
+    name: "R2ACConverterSampleApp",
     targets: [],
     swiftLanguageVersions: [.v5]
 )

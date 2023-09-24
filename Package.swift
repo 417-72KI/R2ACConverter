@@ -18,10 +18,10 @@ let devPlugins: [Target.PluginUsage] = isDevelop ? [
 ] : []
 
 let package = Package(
-    name: "AssetCatalogConverter",
+    name: "R2ACConverter",
     platforms: [.macOS(.v13), .iOS("999999"), .watchOS("999999"), .tvOS("999999")],
     products: [
-        .executable(name: "asset-catalog-converter", targets: ["AssetCatalogConverter"]),
+        .executable(name: "r2acconverter", targets: ["R2ACConverter"]),
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.2.3"),
@@ -29,22 +29,22 @@ let package = Package(
     ] + devDependencies,
     targets: [
         .executableTarget(
-            name: "AssetCatalogConverter",
+            name: "R2ACConverter",
             dependencies: [
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
-                "AssetCatalogConverterCore"
+                "R2ACConverterCore"
             ]
         ),
         .target(
-            name: "AssetCatalogConverterCore",
+            name: "R2ACConverterCore",
             dependencies: [
                 .product(name: "SwiftSyntax", package: "swift-syntax"),
                 .product(name: "SwiftParser", package: "swift-syntax"),
             ],
             plugins: [] + devPlugins
         ),
-        .testTarget(name: "AssetCatalogConverterCoreTests",
-                    dependencies: ["AssetCatalogConverterCore"]),
+        .testTarget(name: "R2ACConverterCoreTests",
+                    dependencies: ["R2ACConverterCore"]),
     ],
     swiftLanguageVersions: [.v5]
 )

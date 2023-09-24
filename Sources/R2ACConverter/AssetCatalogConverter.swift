@@ -1,8 +1,8 @@
 import ArgumentParser
-import AssetCatalogConverterCore
+import R2ACConverterCore
 
 @main
-struct AssetCatalogConverter: AsyncParsableCommand {
+struct R2ACConverter: AsyncParsableCommand {
     @Argument(help: "Path of the project to convert.")
     var path: String
 

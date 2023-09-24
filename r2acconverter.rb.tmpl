@@ -1,0 +1,30 @@
+class R2ACConverter < Formula
+  desc "Convert R.swift resources with Asset Catalog for Xcode 15"
+  homepage "https://github.com/417-72KI/R2ACConverter"
+  version "{{TAG}}"
+
+  on_macos do
+    url "https://github.com/417-72KI/R2ACConverter/archive/#{version}.tar.gz"
+    sha256 "{{SHA256_SOURCE}}"
+    depends_on :xcode => ["15.0", :build]
+  end
+  on_linux do
+    url "https://github.com/417-72KI/R2ACConverter/releases/download/#{version}/r2acconverter-linux-v#{version}.zip"
+    sha256 "{{SHA256_LINUX}}"
+  end
+  license "MIT"
+  head "https://github.com/417-72KI/R2ACConverter.git", branch: "main"
+
+  def install
+    if OS.mac?
+      system "swift", "build", "--disable-sandbox", "-c", "release", "-Xswiftc", "-suppress-warnings"
+      bin.install ".build/release/r2acconverter"
+    elsif OS.linux?
+      bin.install "r2acconverter"
+    end
+  end
+
+  test do
+    system "#{bin}/r2acconverter", "--version"
+  end
+end

@@ -2,7 +2,7 @@ import XCTest
 import SwiftSyntax
 import SwiftParser
 
-@testable import AssetCatalogConverterCore
+@testable import R2ACConverterCore
 
 final class RswiftResourceReaderTests: XCTestCase {
     func testImage() throws {

@@ -4,7 +4,7 @@ on:
     tags: '*'
   workflow_dispatch:
 env:
-  EXECUTABLE_NAME: asset-catalog-converter
+  EXECUTABLE_NAME: r2acconverter
   EXECUTABLE_VERSION: ${{ github.ref_name }}
 jobs:
   generate-matrix:
