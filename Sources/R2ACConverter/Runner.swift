@@ -7,6 +7,9 @@ struct Runner: AsyncParsableCommand {
     @Argument(help: "a path of the project to convert, default to current directory")
     var path: String?
 
+    @Option(name: .shortAndLong, help: "paths to ignore directories")
+    var exclude: [String] = []
+
     static var configuration: CommandConfiguration {
         .init(version: ApplicationInfo.version)
     }
