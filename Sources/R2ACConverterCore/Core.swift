@@ -3,7 +3,7 @@ import Foundation
 import FoundationNetworking
 #endif
 
-public actor Runner {
+public actor Core {
     var workingDir: String
 
     let fm = FileManager.default
@@ -13,13 +13,13 @@ public actor Runner {
     }
 }
 
-public extension Runner {
+public extension Core {
     func run() throws {
         try convert(inDirectory: workingDir)
     }
 }
 
-extension Runner {
+extension Core {
     func convert(inDirectory directoryPath: String) throws {
         logger.debug("Lookup: \(directoryPath)")
         let files = try fm.contentsOfDirectory(atPath: directoryPath)

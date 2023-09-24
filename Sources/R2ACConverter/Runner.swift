@@ -2,7 +2,7 @@ import ArgumentParser
 import R2ACConverterCore
 
 @main
-struct R2ACConverter: AsyncParsableCommand {
+struct Runner: AsyncParsableCommand {
     @Argument(help: "Path of the project to convert.")
     var path: String
 
@@ -11,6 +11,6 @@ struct R2ACConverter: AsyncParsableCommand {
     }
 
     func run() async throws {
-        try await Runner(path: path).run()
+        try await Core(path: path).run()
     }
 }
