@@ -59,7 +59,7 @@ final class RswiftResourceRewriter: SyntaxRewriter {
         if let expr = token.expression.as(FunctionCallExprSyntax.self),
            let converted = visit(expr).as(FunctionCallExprSyntax.self),
            expr != converted {
-            return super.visit(converted)
+            return ExprSyntax(converted)
         }
         return super.visit(token)
     }

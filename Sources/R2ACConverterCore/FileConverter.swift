@@ -28,14 +28,14 @@ private extension FileConverter {
                         leadingTrivia: node.leadingTrivia,
                         trailingTrivia: node.trailingTrivia
                     )
-                    return super.visit(builder.build())
+                    return ExprSyntax(builder.build())
                 case let .color(colorName):
                     let builder = UIColorBuilder(
                         colorName: colorName.camelized,
                         leadingTrivia: node.leadingTrivia,
                         trailingTrivia: node.trailingTrivia
                     )
-                    return super.visit(builder.build())
+                    return ExprSyntax(builder.build())
                 default: break
                 }
             }
@@ -62,7 +62,7 @@ private extension FileConverter {
             if let expr = token.expression.as(FunctionCallExprSyntax.self),
                let converted = visit(expr).as(FunctionCallExprSyntax.self),
                expr != converted {
-                return super.visit(converted)
+                return ExprSyntax(converted)
             }
             return super.visit(token)
         }
