@@ -12,11 +12,10 @@ final class RswiftResourceReaderTests: XCTestCase {
             ("R.image.baz()", "baz"),
             ("R.image.qux", "qux"),
         ]
+        let reader = RswiftResourceReader(viewMode: .all)
         pattern.forEach { source, expected in
             let syntax = Parser.parse(source: source)
-            let reader = RswiftResourceReader(viewMode: .all)
-            reader.walk(syntax)
-            XCTAssertEqual(.image(expected), reader.detectedResource)
+            XCTAssertEqual(.image(expected), reader.detectResource(from: syntax))
         }
     }
 
@@ -27,11 +26,10 @@ final class RswiftResourceReaderTests: XCTestCase {
             ("R.color.baz()", "baz"),
             ("R.color.qux", "qux"),
         ]
+        let reader = RswiftResourceReader(viewMode: .all)
         pattern.forEach { source, expected in
             let syntax = Parser.parse(source: source)
-            let reader = RswiftResourceReader(viewMode: .all)
-            reader.walk(syntax)
-            XCTAssertEqual(.color(expected), reader.detectedResource)
+            XCTAssertEqual(.color(expected), reader.detectResource(from: syntax))
         }
     }
 }

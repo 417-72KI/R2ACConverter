@@ -2,7 +2,7 @@ import Foundation
 import SwiftSyntax
 
 final class RswiftResourceReader: SyntaxVisitor {
-    private(set) var detectedResource: ResourceType?
+    private var detectedResource: ResourceType?
 
     override func visit(_ node: MemberAccessExprSyntax) -> SyntaxVisitorContinueKind {
         if case "R" = node.base?.as(DeclReferenceExprSyntax.self)?.baseName.text,
@@ -18,6 +18,13 @@ final class RswiftResourceReader: SyntaxVisitor {
             return .skipChildren
         }
         return .visitChildren
+    }
+}
+
+extension RswiftResourceReader {
+    func detectResource(from node: some SyntaxProtocol) -> ResourceType? {
+        walk(node)
+        return detectedResource
     }
 }
 

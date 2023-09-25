@@ -20,9 +20,8 @@ private extension FileConverter {
             if let member = node.calledExpression.as(MemberAccessExprSyntax.self),
                let base = member.base?.as(MemberAccessExprSyntax.self),
                base.base?.as(DeclReferenceExprSyntax.self)?.baseName.text == "R" {
-                let reader = RswiftResourceReader(viewMode: .all)
-                reader.walk(base)
-                switch reader.detectedResource {
+                let reader = RswiftResourceReader(viewMode: viewMode)
+                switch reader.detectResource(from: base) {
                 case let .image(imageName):
                     let builder = UIImageBuilder(
                         imageName: imageName.camelized,
@@ -45,12 +44,12 @@ private extension FileConverter {
                 switch decl.baseName.text {
                 case "Image":
                     return ExprSyntax(
-                        SwiftUIImageRewriter(viewMode: .all)
+                        SwiftUIImageRewriter(viewMode: viewMode)
                             .visit(node)
                     )
                 case "Color":
                     return ExprSyntax(
-                        SwiftUIColorRewriter(viewMode: .all)
+                        SwiftUIColorRewriter(viewMode: viewMode)
                             .visit(node)
                     )
                 default: break
