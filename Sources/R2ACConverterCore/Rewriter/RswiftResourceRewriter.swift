@@ -26,7 +26,7 @@ final class RswiftResourceRewriter: SyntaxRewriter {
                         .init(
                             label: .identifier("resource"),
                             colon: .colonToken(trailingTrivia: .space),
-                            expression: expr
+                            expression: expr.with(\.leadingTrivia, [])
                         )
                     ],
                     rightParen: .rightParenToken(),
