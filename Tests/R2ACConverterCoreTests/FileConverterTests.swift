@@ -18,6 +18,7 @@ final class FileConverterTests: XCTestCase {
 
                     imageView.image = R.image.foo_bar_1()
                     imageView.image = R.image.foo_bar_2()!
+                        .resized()!
 
                     view.backgroundColor = R.color.blue()
                     view.backgroundColor = R.color.blue()!
@@ -62,6 +63,7 @@ final class FileConverterTests: XCTestCase {
 
                     imageView.image = UIImage(resource: .fooBar1)
                     imageView.image = UIImage(resource: .fooBar2)
+                        .resized()!
 
                     view.backgroundColor = UIColor(resource: .blue)
                     view.backgroundColor = UIColor(resource: .blue)
