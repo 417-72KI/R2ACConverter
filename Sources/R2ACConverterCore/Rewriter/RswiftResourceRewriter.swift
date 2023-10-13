@@ -63,4 +63,13 @@ final class RswiftResourceRewriter: SyntaxRewriter {
         }
         return super.visit(token)
     }
+
+    override func visit(_ token: OptionalChainingExprSyntax) -> ExprSyntax {
+        if let expr = token.expression.as(FunctionCallExprSyntax.self),
+           let converted = visit(expr).as(FunctionCallExprSyntax.self),
+           expr != converted {
+            return ExprSyntax(converted)
+        }
+        return super.visit(token)
+    }
 }
