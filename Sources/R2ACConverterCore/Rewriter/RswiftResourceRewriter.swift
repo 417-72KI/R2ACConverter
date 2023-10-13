@@ -52,6 +52,16 @@ final class RswiftResourceRewriter: SyntaxRewriter {
                 )
             }
         }
+        if let expr = node.base?.as(OptionalChainingExprSyntax.self),
+           let converted = visit(expr).as(FunctionCallExprSyntax.self),
+           expr.expression.as(FunctionCallExprSyntax.self) != converted {
+            return ExprSyntax(node.with(\.base, ExprSyntax(converted)))
+        }
+        if let expr = node.base?.as(ForceUnwrapExprSyntax.self),
+           let converted = visit(expr).as(FunctionCallExprSyntax.self),
+           expr.expression.as(FunctionCallExprSyntax.self) != converted {
+            return ExprSyntax(node.with(\.base, ExprSyntax(converted)))
+        }
         return super.visit(node)
     }
 
