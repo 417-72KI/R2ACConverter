@@ -1,6 +1,6 @@
 {
-    "xcode_version": "15.4",
+    "xcode_version": "16.2",
     "swift_version": [
-        "5.10"
+        "6.0"
     ]
 }
