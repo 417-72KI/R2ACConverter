@@ -53,12 +53,17 @@ jobs:
           -clonedSourcePackagesDirPath '.build' \
           -resultBundlePath 'test_output/R2ACConverter.xcresult' \
           clean test | xcpretty
-      - uses: kishikawakatsumi/xcresulttool@v1
+      # - uses: kishikawakatsumi/xcresulttool@v1
+      #   if: success() || failure()
+      #   with:
+      #     path: test_output/R2ACConverter.xcresult
+      #     show-passed-tests: false
+      #     show-code-coverage: false
+      - uses: actions/upload-artifact@v4
         if: success() || failure()
         with:
+          name: test-output
           path: test_output/R2ACConverter.xcresult
-          show-passed-tests: false
-          show-code-coverage: false
   linux:
     name: Linux
     needs: generate-matrix
