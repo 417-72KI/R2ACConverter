@@ -11,6 +11,7 @@ opt_in_rules:
   - all
 disabled_rules:
   - conditional_returns_on_newline
+  - contrasted_opening_brace
   - explicit_acl
   - explicit_enum_raw_value
   - explicit_self
