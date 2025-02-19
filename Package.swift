@@ -8,15 +8,6 @@ var isDevelop = true
 isDevelop = false
 #endif
 
-let devDependencies: [Package.Dependency] = isDevelop ? [
-    // .package(url: "https://github.com/realm/SwiftLint", from: "0.52.4"),
-    .package(url: "https://github.com/realm/SwiftLint", branch: "main"),
-] : []
-
-let devPlugins: [Target.PluginUsage] = isDevelop ? [
-    .plugin(name: "SwiftLintPlugin", package: "SwiftLint"),
-] : []
-
 let package = Package(
     name: "R2ACConverter",
     platforms: [.macOS(.v13), .iOS("999999"), .watchOS("999999"), .tvOS("999999")],
@@ -26,7 +17,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.5.0"),
         .package(url: "https://github.com/apple/swift-syntax", from: "509.1.1"),
-    ] + devDependencies,
+    ],
     targets: [
         .executableTarget(
             name: "R2ACConverter",
@@ -41,10 +32,19 @@ let package = Package(
                 .product(name: "SwiftSyntax", package: "swift-syntax"),
                 .product(name: "SwiftParser", package: "swift-syntax"),
             ],
-            plugins: [] + devPlugins
+            plugins: []
         ),
         .testTarget(name: "R2ACConverterCoreTests",
                     dependencies: ["R2ACConverterCore"]),
     ],
     swiftLanguageVersions: [.v5]
 )
+
+if isDevelop {
+    package.dependencies.append(contentsOf: [
+        .package(url: "https://github.com/SimplyDanny/SwiftLintPlugins", from: "0.58.2"),
+    ])
+    package.targets.forEach {
+        $0.plugins?.append(.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins"))
+    }
+}
