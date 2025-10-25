@@ -59,7 +59,7 @@ jobs:
       #     path: test_output/R2ACConverter.xcresult
       #     show-passed-tests: false
       #     show-code-coverage: false
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         if: success() || failure()
         with:
           name: test-output
