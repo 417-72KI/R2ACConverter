@@ -7,7 +7,7 @@ options:
 packages:
   R.swift:
     url: https://github.com/mac-cain13/R.swift
-    from: 7.4.0
+    from: 7.8.0
 targets:
   R2ACConverterSample:
     type: application
