@@ -15,7 +15,7 @@ jobs:
     name: Generate matrix
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
       - id: set-matrix
         run: |
           matrix=$(cat .github/matrix.json | jq -rc .)
@@ -29,8 +29,8 @@ jobs:
     env:
       DEVELOPER_DIR: /Applications/Xcode_${{ fromJson(needs.generate-matrix.outputs.matrix).xcode_version }}.app/Contents/Developer
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/cache@v5
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         with:
           path: .build
           key: ${{ runner.os }}-swift-${{ hashFiles('Package.resolved') }}
@@ -59,7 +59,7 @@ jobs:
       #     path: test_output/R2ACConverter.xcresult
       #     show-passed-tests: false
       #     show-code-coverage: false
-      - uses: actions/upload-artifact@v7
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         if: success() || failure()
         with:
           name: test-output
@@ -75,8 +75,8 @@ jobs:
     container:
       image: swift:${{ matrix.swift_version }}
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/cache@v5
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         with:
           path: .build
           key: ${{ runner.os }}-swift-${{ matrix.swift_version }}-${{ hashFiles('Package.resolved') }}
